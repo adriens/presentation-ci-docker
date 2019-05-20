@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <!--<title>Penser "micro", business value et réduction du Time To Market :
+        un cas concret de la génèse d'une nouveau service...</title>
+-->
+<title>CI Workflows avec Docker</title>
+    <meta name="description" content="Utiliser Docker pour releaser plus vite et mieux en designant des Workflow avec la CI">
+    <meta name="author" content="Adrien Sales">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        
+        <section data-background-transition="slide" data-background="img/Cover.png">
+
+            <h3>Releaser plus vite & mieux.</h3>
+            <h4>De la CI à la micro CI avec Docker, Jib & Circle CI.</h4>
+       </section>
+
+        <!-- --------------------------------------------------------- -->
+		<section>
+            <h3>Stack actuelle</h3>
+            <p><ul>
+				<li>Java/gradle</li>
+				<li>CI Jenkins</li>
+				<li>Gitlab</li>
+				<li>Docker (compose) sur postes développeurs</li>
+				<li>Les <tt>jar</tt> exécutables via Spring Boot</li>
+			</ul></p>
+        </section>
+
+		<section>
+            <h3>Observations</h3>
+            <p><ul>
+				<li class="fragment">Jenkins parfois planté</li>
+				<li class="fragment">Longueur de certains runs ("mais ça passe sur mon poste...")</li>
+				<li class="fragment">Tests unitaires</li>
+				<li class="fragment">Analyse statique de code</li>
+				<li class="fragment">Complexité croissante des tests</li>
+				<li class="fragment">Duplicat de portions de tests entre projets</li>
+			</ul></p>
+		</section>
+
+		<section data-transition="zoom">
+            <h3>Evolution des besoins : tests d'intégration</h3>
+            <p><ul>
+				<li class="fragment">Besoin d' "infra montée à la demande"</li>
+				<li class="fragment">Grande variété de middlewares (ELK, Postgres, Oracle, Dév spécifiques, ...)</li>
+				<li class="fragment">Des workflows métier toujours plus complexes</li>
+			</ul></p>
+		</section>
+
+
+		<section>
+            <h3>"Left-Shifter" la maintenance</h3>
+            <p><ul>
+				<li class="fragment">Ex GLIA/OA : test "crossprojets" manquants cause de régressions/incidents</li>
+				<li class="fragment">Forte spécificité/métier</li>
+				<li class="fragment">Tests nécessitant des middlewares</li>
+				<li class="fragment">Incapacité pour une équipe unique de concevoir/maintenir les tests des traitements connexes</li>
+			</ul></p>
+		</section>
+
+		<section data-transition="zoom">
+            <h3>Besoin de simplification</h3>
+            <p>Factoriser la maintenance de tests complexes dans un contexte de CI.</p>
+        </section>
+		
+		<section data-transition="convex">
+            <h3>Worflow dans la CI</h3>
+            <p>Splitter la CI par morceaux afin d'en simplifier le développement,
+				l'exploitation et la maintenance.</p>
+		</section>
+
+		<section>
+				<h3>Design d'une solution</h3>
+				<p>
+					<ul>
+						<li class="fragment">Développer de petites boîtes de test</li>
+						<li class="fragment">Déployer/Releaser sur un dépôt</li>
+						<li class="fragment">Configurer un workflow de CI</li>
+					</ul>
+				</p>
+			</section>
+		
+
+        <section data-transition="convex">
+            <h3>L'unité de test : la "boîte"</h3>
+            <p>
+				<blockquote>Développer un outil qui exécute très bien et facilement une tâche/process au périmètre
+					très restreint.</blockquote>
+			</p>
+		</section>
+		
+		<section>
+				<h3>GoogleContainerTools/jib</h3>
+				<p>
+					<ul>
+							<li>"multiple layers for more granular incremental builds."</li>
+							<li>"When you change your code, only your changes are rebuilt, not your entire application"</li>
+							<li>Utilisation de "Distroless" comme image de base</li>
+							<li>Pas de Dockerfile (pur Gradle/Maven)</li>
+							<li>Pas de daemon docker</li>
+					</ul>
+				</p>
+		</section>
+
+		<section>
+				<h3>Docker build flow</h3>
+			<p>
+				<img src = "img/docker_build_flow.png">
+			</p>
+		</section>
+
+		<section>
+				<h3>Jib build flow</h3>
+				<p>
+					<img src = "img/jib_build_flow.png">
+				</p>
+		</section>
+
+		<section>
+				<h3>Jib / Maven : configuration</h3>
+				<p>
+						<pre><code class="xml" data-line-numbers="3,5,9">
+...
+<plugin>
+    <groupId>com.google.cloud.tools</groupId>
+    <artifactId>jib-maven-plugin</artifactId>
+    <version>1.2.0</version>
+    <configuration>
+        <to>
+            <image>gcr.io/my-project/image-built-with-jib</image>
+        </to>
+    </configuration>
+</plugin>
+</code></pre></p>
+		</section>
+
+		<section>
+				<h3>Jib / Maven : build</h3>
+				<p>
+						<pre><code class="bash" data-line-numbers="3">
+# Builds to a container image registry.
+$ mvn compile jib:build
+</code></pre></p>
+		</section>
+
+
+		<section>
+				<h3>Jib / Gradle : configuration</h3>
+				<p>
+						<pre><code class="xml" data-line-numbers="3,5">
+plugins {
+    id 'com.google.cloud.tools.jib' version '0.9.0'
+}
+jib.to.image = 'gcr.io/my-project/image-built-with-jib'
+</code></pre></p>
+		</section>
+
+		<section>
+				<h3>Jib / Gradle : build</h3>
+				<p>
+						<pre><code class="bash" data-line-numbers="3">
+# Builds to a container image registry.
+$ gradle jib
+</code></pre></p>
+		</section>		
+
+		<section>
+				<h3>La "micro CI"</h3>
+				<p>
+					<ul>
+						<li>Déployer la boîte comme image Docker via <tt>GoogleContainerTools/jib</tt></li>
+						<li>Garder les test compacts</li>
+						<li>Diviser la complexité pour mieux régner</li>
+						<li>Centralisation pour maintenance aisée</li>
+						<li>Intégré à la CI</li>
+						<li>Facile à partager/intégrer</li>
+					</ul>
+				</p>
+			</section>
+
+			<section>
+					<h3>Les worflows</h3>
+					<p>
+						<ul>
+							<li>Déployer la boîte comme image Docker via <tt>GoogleContainerTools/jib</tt></li>
+							<li>Garder les test compacts</li>
+							<li>Diviser la complexité pour mieux régner</li>
+							<li>Centralisation pour maintenance aisée</li>
+							<li>Intégré à la CI</li>
+							<li>Facile à partager/intégrer</li>
+						</ul>
+					</p>
+				</section>
+
+				<section>
+					<h3>La CI comme moteur de ressources : CircleCI</h3>
+					<blockquote>Utiliser le moteur de CI pour accéder à la conteneurisation.</blockquote>
+				</section>
+
+				<section>
+					<h3>Workflow  Séquentiel</h3>
+					<img src="img/sequential_workflow.png">
+				</section>
+
+				<section>
+						<h3>Workflow en râteau</h3>
+						<img src="img/fan_in_out.png">
+					</section>
+
+
+					<section>
+						<h3>Cas pratique : encoding UTF-8</h3>
+						<p>
+							<ul>
+								<li>Mettre à disposition une boîte qui teste l'encoding de fchiers d'un répertoire donné : <tt>UTF-8</tt> exigé.</li>
+								<li>Dév d'un <tt>jar</tt> exécutable qui teste tous les fichiers dans un <tt>~/input</tt></li>
+							</ul>
+						</p>
+
+					</section>
+		
+		
+			<section>
+				<h3>Configuration</h3>
+				<img src="img/maven-conf.png"/>
+			</section>
+
+			<section>
+				<h3>Build/deploiement de la Boîte</h3>
+				<pre><code>
+mvn compile jib:build
+				</code></pre>
+			</section>
+
+<section>
+		<iframe data-autoplay width="840" height="690" src="https://www.youtube.com/embed/zObUxH-lsB0" allowfullscreen ></iframe>
+	</section>
+
+
+<section>
+	<h3>Configurer le Job de check UTF-8</h3>
+	<img src="img/conf-utf8.png"/>
+</section>
+
+<section data-transition="zoom">
+		<h3>Workflow : configuration</h3>
+		<img src="img/workflow-configuration.png"/>
+	</section>
+
+	<section data-transition="convex">
+			<h3>Workflow : design</h3>
+			<img src="img/workflow-design.png"/>
+		</section>
+
+		<section>
+				<h3>Démo</h3>
+				</section>
+
+
+		<section>
+				<iframe data-autoplay width="840" height="690" src="https://www.youtube.com/embed/sIRXggCef1Q" allowfullscreen ></iframe>
+			</section>
+
+			<section>
+				<h3>Points forts</h3>
+				<p>
+					<ul>
+							<li class="fragment">Techno agnostique</li>
+							<li class="fragment">Split code test vs. / worflows CI </li>
+							<li class="fragment">Facilité de partage</li>
+							<li class="fragment">Conception de test collaboratif</li>
+							<li class="fragment">"Micro-testing"</li>
+							<li class="fragment">Cross Teams pipelines</li>
+					</ul>
+					
+
+				</p>
+			</section>
+
+			<section>
+				<h3>"Left-Shifting" sur les ressources</h3>
+				<p>Porter dès la phase de test les contraintes de ressources et performances</p>
+				<img src="img/circle-ci-resources.png" width="70%"/>
+			</section>
+
+			<section  data-transition="zoom">
+				<h3>"Micro-CI units"</h3>
+				<blockquote>Confortable, flexible et outil de transition en douceur vers la conteneurisation.</blockquote>
+			</section>
+
+			<section data-background-transition="slide" data-background="img/lao.png" data-background-size="40%">
+		   </section>
+
+
+<!-- --------------------------------------------------------------------------- -->
+
+       
+        
+        
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+		
+		// allotted time for presentation
+		//allottedTime: 3 * 60 * 1000, // 3 minutes
+                allottedTime: 60 * 60 * 1000, // 60 minutes
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true },
+            { src: 'plugin/notes/notes.js', async: true },
+            { src: 'plugin/tagcloud/tagcloud.js', async: true },
+			{ src: 'plugin/elapsed-time-bar/elapsed-time-bar.js'}
+        ]
+    });
+
+</script>
+
+</body>
+</html>
