@@ -53,7 +53,7 @@
        </section>
 
         <!-- --------------------------------------------------------- -->
-		<section>
+		<section data-transition="convex">
             <h3>Stack actuelle</h3>
             <p><ul>
 				<li>Java/gradle</li>
@@ -103,15 +103,15 @@
 		
 		<section data-transition="convex">
             <h3>Worflow dans la CI</h3>
-            <p>Splitter la CI par morceaux afin d'en simplifier le développement,
-				l'exploitation et la maintenance.</p>
+            <blockquote>Splitter la CI par morceaux afin d'en simplifier le développement,
+				l'exploitation et la maintenance.</blockquote>
 		</section>
 
 		<section>
 				<h3>Design d'une solution</h3>
 				<p>
 					<ul>
-						<li class="fragment">Développer de petites boîtes de test</li>
+						<li class="fragment">Développer de petites "boîtes de test"</li>
 						<li class="fragment">Déployer/Releaser sur un dépôt</li>
 						<li class="fragment">Configurer un workflow de CI</li>
 					</ul>
@@ -127,34 +127,37 @@
 			</p>
 		</section>
 		
+		<section data-background ="img/jib-build-docker-java-container-image.png" data-background-size="70%">
+
+		</section>
 		<section>
-				<h3>GoogleContainerTools/jib</h3>
+				<h3>Google Container Tools/jib</h3>
 				<p>
 					<ul>
-							<li>"multiple layers for more granular incremental builds."</li>
-							<li>"When you change your code, only your changes are rebuilt, not your entire application"</li>
+							<li><i>"multiple layers for more granular incremental builds."</i></li>
+							<li><i>"When you change your code, only your changes are rebuilt, not your entire application"</i></li>
 							<li>Utilisation de "Distroless" comme image de base</li>
 							<li>Pas de Dockerfile (pur Gradle/Maven)</li>
-							<li>Pas de daemon docker</li>
+							<li>Pas de <tt>daemon</tt> docker</li>
 					</ul>
 				</p>
 		</section>
 
-		<section>
-				<h3>Docker build flow</h3>
+		<section data-transition="convex">
+				<h3>Docker build flow (classique)</h3>
 			<p>
 				<img src = "img/docker_build_flow.png">
 			</p>
 		</section>
 
-		<section>
+		<section data-transition="convex">
 				<h3>Jib build flow</h3>
 				<p>
 					<img src = "img/jib_build_flow.png">
 				</p>
 		</section>
 
-		<section>
+		<section data-transition="convex">
 				<h3>Jib / Maven : configuration</h3>
 				<p>
 						<pre><code class="xml" data-line-numbers="3,5,9">
@@ -172,17 +175,17 @@
 </code></pre></p>
 		</section>
 
-		<section>
+		<section data-transition="convex">
 				<h3>Jib / Maven : build</h3>
 				<p>
 						<pre><code class="bash" data-line-numbers="3">
 # Builds to a container image registry.
 $ mvn compile jib:build
 </code></pre></p>
-		</section>
+		</section data-transition="convex">
 
 
-		<section>
+		<section data-transition="convex">
 				<h3>Jib / Gradle : configuration</h3>
 				<p>
 						<pre><code class="xml" data-line-numbers="3,5">
@@ -207,30 +210,15 @@ $ gradle jib
 				<p>
 					<ul>
 						<li>Déployer la boîte comme image Docker via <tt>GoogleContainerTools/jib</tt></li>
-						<li>Garder les test compacts</li>
-						<li>Diviser la complexité pour mieux régner</li>
+						<li>Stratégie "diviser pour mieux régner"</li>
 						<li>Centralisation pour maintenance aisée</li>
 						<li>Intégré à la CI</li>
-						<li>Facile à partager/intégrer</li>
+						<li>Facile à partager/intégrer (via dépôts)</li>
 					</ul>
 				</p>
 			</section>
 
-			<section>
-					<h3>Les worflows</h3>
-					<p>
-						<ul>
-							<li>Déployer la boîte comme image Docker via <tt>GoogleContainerTools/jib</tt></li>
-							<li>Garder les test compacts</li>
-							<li>Diviser la complexité pour mieux régner</li>
-							<li>Centralisation pour maintenance aisée</li>
-							<li>Intégré à la CI</li>
-							<li>Facile à partager/intégrer</li>
-						</ul>
-					</p>
-				</section>
-
-				<section>
+				<section data-background="img/default-img-tag.png">
 					<h3>La CI comme moteur de ressources : CircleCI</h3>
 					<blockquote>Utiliser le moteur de CI pour accéder à la conteneurisation.</blockquote>
 				</section>
@@ -247,10 +235,10 @@ $ gradle jib
 
 
 					<section>
-						<h3>Cas pratique : encoding UTF-8</h3>
+						<h3>Cas pratique : exiger de l' <tt>UTF-8</tt></h3>
 						<p>
 							<ul>
-								<li>Mettre à disposition une boîte qui teste l'encoding de fchiers d'un répertoire donné : <tt>UTF-8</tt> exigé.</li>
+								<li>Mettre à disposition une boîte qui teste l'encoding de fchiers d'un répertoire donné</li>
 								<li>Dév d'un <tt>jar</tt> exécutable qui teste tous les fichiers dans un <tt>~/input</tt></li>
 							</ul>
 						</p>
@@ -258,12 +246,12 @@ $ gradle jib
 					</section>
 		
 		
-			<section>
+			<section data-transition="convex">
 				<h3>Configuration</h3>
 				<img src="img/maven-conf.png"/>
 			</section>
 
-			<section>
+			<section data-transition="convex">
 				<h3>Build/deploiement de la Boîte</h3>
 				<pre><code>
 mvn compile jib:build
@@ -275,7 +263,7 @@ mvn compile jib:build
 	</section>
 
 
-<section>
+<section data-transition="convex">
 	<h3>Configurer le Job de check UTF-8</h3>
 	<img src="img/conf-utf8.png"/>
 </section>
@@ -299,13 +287,13 @@ mvn compile jib:build
 				<iframe data-autoplay width="840" height="690" src="https://www.youtube.com/embed/sIRXggCef1Q" allowfullscreen ></iframe>
 			</section>
 
-			<section>
+			<section data-transition="zoom">
 				<h3>Points forts</h3>
 				<p>
 					<ul>
 							<li class="fragment">Techno agnostique</li>
-							<li class="fragment">Split code test vs. / worflows CI </li>
-							<li class="fragment">Facilité de partage</li>
+							<li class="fragment">Split code de test vs. / worflows CI </li>
+							<li class="fragment">Facilité de distribution</li>
 							<li class="fragment">Conception de test collaboratif</li>
 							<li class="fragment">"Micro-testing"</li>
 							<li class="fragment">Cross Teams pipelines</li>
@@ -317,7 +305,7 @@ mvn compile jib:build
 
 			<section>
 				<h3>"Left-Shifting" sur les ressources</h3>
-				<p>Porter dès la phase de test les contraintes de ressources et performances</p>
+				<p>Porter dès la phase de test les contraintes de ressources, privilèges et performances</p>
 				<img src="img/circle-ci-resources.png" width="70%"/>
 			</section>
 
