@@ -56,10 +56,10 @@
 		<section data-transition="convex">
             <h3>Stack actuelle</h3>
             <p><ul>
-				<li>Java/gradle</li>
-				<li>CI Jenkins</li>
-				<li>Gitlab</li>
-				<li>Docker (compose) sur postes développeurs</li>
+				<li>Build : Java/Gradle</li>
+				<li>CI : Jenkins</li>
+				<li>VCS : Gitlab</li>
+				<li>Conteneurisation : Docker (compose) sur postes développeurs</li>
 				<li>Les <tt>jar</tt> exécutables via Spring Boot</li>
 			</ul></p>
         </section>
@@ -68,7 +68,7 @@
             <h3>Observations</h3>
             <p><ul>
 				<li class="fragment">Jenkins parfois planté</li>
-				<li class="fragment">Longueur de certains runs ("mais ça passe sur mon poste...")</li>
+				<li class="fragment">Longueur de certains runs (<i>"mais ça passe sur mon poste..."</i>)</li>
 				<li class="fragment">Tests unitaires</li>
 				<li class="fragment">Analyse statique de code</li>
 				<li class="fragment">Complexité croissante des tests</li>
@@ -79,9 +79,9 @@
 		<section data-transition="zoom">
             <h3>Evolution des besoins : tests d'intégration</h3>
             <p><ul>
-				<li class="fragment">Besoin d' "infra montée à la demande"</li>
+				<li class="fragment">Besoin d' "infra montée à la demande sur des besoins toujours plus variés"</li>
 				<li class="fragment">Grande variété de middlewares (ELK, Postgres, Oracle, Dév spécifiques, ...)</li>
-				<li class="fragment">Des workflows métier toujours plus complexes</li>
+				<li class="fragment">Workflows métier toujours plus complexes</li>
 			</ul></p>
 		</section>
 
@@ -89,9 +89,8 @@
 		<section>
             <h3>"Left-Shifter" la maintenance</h3>
             <p><ul>
-				<li class="fragment">Ex GLIA/OA : test "crossprojets" manquants cause de régressions/incidents</li>
-				<li class="fragment">Forte spécificité/métier</li>
-				<li class="fragment">Tests nécessitant des middlewares</li>
+				<li class="fragment">Exemple GLIA/OA : test "cross-projets" manquants cause de régressions/incidents</li>
+				<li class="fragment">Forte spécificité/métier & scope des équipes</li>
 				<li class="fragment">Incapacité pour une équipe unique de concevoir/maintenir les tests des traitements connexes</li>
 			</ul></p>
 		</section>
@@ -102,8 +101,8 @@
         </section>
 		
 		<section data-transition="convex">
-            <h3>Worflow dans la CI</h3>
-            <blockquote>Splitter la CI par morceaux afin d'en simplifier le développement,
+            <h3>Worflow & Transversalité</h3>
+            <blockquote>Splitter la CI en segments afin d'en simplifier le développement,
 				l'exploitation et la maintenance.</blockquote>
 		</section>
 
@@ -138,13 +137,13 @@
 							<li><i>"When you change your code, only your changes are rebuilt, not your entire application"</i></li>
 							<li>Utilisation de "Distroless" comme image de base</li>
 							<li>Pas de Dockerfile (pur Gradle/Maven)</li>
-							<li>Pas de <tt>daemon</tt> docker</li>
+							<li>Pas de <tt>daemon</tt> docker sur le poste du développeur</li>
 					</ul>
 				</p>
 		</section>
 
 		<section data-transition="convex">
-				<h3>Docker build flow (classique)</h3>
+				<h3>Docker build flow</h3>
 			<p>
 				<img src = "img/docker_build_flow.png">
 			</p>
@@ -219,7 +218,7 @@ $ gradle jib
 			</section>
 
 				<section data-background="img/default-img-tag.png">
-					<h3>La CI comme moteur de ressources : CircleCI</h3>
+					<h3>La CI : réserve de ressources système</h3>
 					<blockquote>Utiliser le moteur de CI pour accéder à la conteneurisation.</blockquote>
 				</section>
 
@@ -291,12 +290,12 @@ mvn compile jib:build
 				<h3>Points forts</h3>
 				<p>
 					<ul>
-							<li class="fragment">Techno agnostique</li>
+							<li class="fragment">Techno agnostique (Java, Python, Ruby, ...)</li>
 							<li class="fragment">Split code de test vs. / worflows CI </li>
 							<li class="fragment">Facilité de distribution</li>
 							<li class="fragment">Conception de test collaboratif</li>
 							<li class="fragment">"Micro-testing"</li>
-							<li class="fragment">Cross Teams pipelines</li>
+							<li class="fragment">Cross Teams pipelines : transversalité</li>
 					</ul>
 					
 
