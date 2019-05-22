@@ -72,14 +72,14 @@
 				<li class="fragment">Tests unitaires</li>
 				<li class="fragment">Analyse statique de code</li>
 				<li class="fragment">Complexité croissante des tests</li>
-				<li class="fragment">Duplicat de portions de tests entre projets</li>
+				<li class="fragment">Besoin de partager des tests entre équipes</li>
 			</ul></p>
 		</section>
 
 		<section data-transition="zoom">
             <h3>Evolution des besoins : tests d'intégration</h3>
             <p><ul>
-				<li class="fragment">Besoin d' "infra montée à la demande sur des besoins toujours plus variés"</li>
+				<li class="fragment">Nécessité d' "infra montée à la demande sur des besoins toujours plus variés"</li>
 				<li class="fragment">Grande variété de middlewares (ELK, Postgres, Oracle, Dév spécifiques, ...)</li>
 				<li class="fragment">Workflows métiers toujours plus complexes</li>
 			</ul></p>
@@ -95,7 +95,7 @@
             <p><ul>
 				<li class="fragment">Exemple GLIA/OA : test "cross-projets" manquants cause de régressions/incidents</li>
 				<li class="fragment">Forte spécificité/métier & scope des équipes</li>
-				<li class="fragment">Incapacité pour une équipe unique de concevoir/maintenir les tests des traitements connexes</li>
+				<li class="fragment">Difficulté pour une équipe unique de concevoir/maintenir les tests des traitements directement <b>et indirectement</b> connexes</li>
 			</ul></p>
 		</section>
 
@@ -136,10 +136,10 @@
 			</p>
 		</section>
 		
-		<section data-background ="img/jib-build-docker-java-container-image.png" data-background-size="70%">
+		<section data-background ="img/jib-build-docker-java-container-image.png" data-transition="zoom" data-background-size="70%">
 
 		</section>
-		<section>
+		<section data-transition="zoom">
 				<h3>Google Container Tools/jib</h3>
 				<p>
 					<ul>
@@ -152,7 +152,7 @@
 				</p>
 		</section>
 
-		<section data-transition="convex">
+		<section data-transition="zoom">
 				<h3>Docker build flow</h3>
 			<p>
 				<img src = "img/docker_build_flow.png">
@@ -273,7 +273,7 @@ mvn compile jib:build
 
 
 <section data-transition="convex">
-	<h3>Configurer le Job de check UTF-8</h3>
+	<h3>Configurer le Job de check <tt>UTF-8</tt></h3>
 	<img src="img/conf-utf8.png"/>
 </section>
 
